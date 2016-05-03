@@ -41,9 +41,9 @@ class Movie(db.Model):
     __tablename__ = "movies"
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    title = db.Column(db.String(64), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
     released_at = db.Column(db.DateTime, nullable=True)
-    imdb_url = db.Column(db.String(100), nullable=True)
+    imdb_url = db.Column(db.String(200), nullable=True)
 
 class Rating(db.Model):
     """Rating by user on ratings website."""
@@ -51,9 +51,17 @@ class Rating(db.Model):
     __tablename__ = "ratings"
 
     rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    movie_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     score = db.Column(db.Integer, nullable=False)
+
+    # Define relationship to user
+    user = db.relationship("User", 
+                            backref=db.backref("ratings", order_by=rating_id))
+
+    movie = db.relationship("Movie",
+                            backref=db.backref("ratings", order_by=rating_id))
+
 
 ##############################################################################
 # Helper functions

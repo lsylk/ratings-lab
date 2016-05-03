@@ -48,10 +48,15 @@ def load_movies():
     # Read u.user file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip()
-        movie_id, title, released_at, empty_pipe, imdb_url = row.split("|")[0:5]
+        movie_id, title, released_at, empty_pipe, imdb_url = row.split("|")[:5]
 
-        released_at = datetime.strptime(released_at, "%d-%b-%Y").date()
         title = title[:-7]
+
+        if released_at:
+            released_at = datetime.strptime(released_at, "%d-%b-%Y").date()
+        else:
+            released_at = None
+        
 
         movie = Movie(movie_id=movie_id,
                     title=title,
@@ -77,10 +82,10 @@ def load_ratings():
     # Read u.user file and insert data
     for row in open("seed_data/u.data"):
         row = row.rstrip()
-        movie_id, user_id, score = row.split("\t")[:3]
+        user_id, movie_id, score = row.split("\t")[:3]
 
-        rating = Rating(movie_id=movie_id,
-                    user_id=user_id,
+        rating = Rating(user_id=user_id,
+                    movie_id=movie_id,
                     score=score)
 
         # We need to add to the session or it won't ever be stored
