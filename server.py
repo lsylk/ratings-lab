@@ -69,19 +69,22 @@ def log_in():
 def handle_login():
     """Action for login form: log a user in"""
 
+    
     form_email = request.form.get('email')
     form_password = request.form.get('password')
+    user = User.query.filter(User.email == form_email).first()
 
-    user = User.query.filter(User.email == form_email).one()
-
-    if form_password == user.password:
-        session['user'] = user.email
-        flash(("Logged in as {}").format(user.email))
-        return redirect('/')
+    if user:
+        if form_password == user.password:
+            session['user'] == user.email
+            flash(("Logged in as {}").format(user.email))
+            return redirect('/')
+        else:
+            flash("Wrong password")
+            return redirect("/login-form")
     else:
-        flash("Wrong password")
-        return redirect("/login-form")
-
+        flash("You have not registered yet. Please do so.")
+        return redirect("/registration")
 
 
 if __name__ == "__main__":
