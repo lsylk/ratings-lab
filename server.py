@@ -44,17 +44,16 @@ def submitted():
     email = request.form.get("email")
     password = request.form.get("password")
 
-
-
     if User.query.filter_by(email=email).all():
-        print "Email already registered"
+        flash("Email already registered")
+        return redirect("/registration")
     else:
         new_user = User(email=email, 
                         password=password)
         db.session.add(new_user)
         db.session.commit()
 
-    return render_template("submitted.html", email= email)
+        return render_template("submitted.html", email= email)
 
 
 
@@ -66,21 +65,21 @@ def log_in():
 
 
 
-@app.route("/handle-login", methods=["POST"])
+@app.route("/handle-login", methods=["GET", "POST"])
 def handle_login():
     """Action for login form: log a user in"""
 
-    form_email = request.form['email']
-    form_password = request.form['password']
+    form_email = request.form.get('email')
+    form_password = request.form.get('password')
 
     user = User.query.filter(User.email == form_email).one()
 
     if form_password == user.password:
-        session[user.user_id] = user.email
-        # flash("Logged in as {}").format(user.email)
+        session['user'] = user.email
+        flash(("Logged in as {}").format(user.email))
         return redirect('/')
     else:
-        # flash("Wrong password")
+        flash("Wrong password")
         return redirect("/login-form")
 
 
