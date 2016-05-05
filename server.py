@@ -96,10 +96,24 @@ def user_log_out():
     flash("You successfully logged out")
     return redirect('/')
 
-# @app.route("/users/<int:user.user_id>")
-# def user_info():
-#     """Provide user info"""
 
+@app.route("/users/<int:user_id>")
+def user_info(user_id):
+    """Provide user info"""
+
+    user = User.query.filter_by(user_id=user_id).first()
+
+    age = user.age
+    zipcode = user.zipcode
+    ratings_from_user = user.ratings
+
+
+    return render_template("user_info.html", user_id=user_id,
+                                            age=age,
+                                            zipcode=zipcode,
+                                            ratings_from_user=ratings_from_user)
+
+# User.query.filter_by(email=email).all():
     
 
 
