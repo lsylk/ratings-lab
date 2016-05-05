@@ -4,11 +4,18 @@
     <h2>User Information</h2>
 
     Yay we got here
-    {{ age }}<br>
-    {{ zipcode }}<br>
-    {{ ratings_from_user }}<br>
-    <br>
+    Age: {{ age }}<br>
+    zip: {{ zipcode }}<br>
 
-   
+    <ul>
+    {% for rating in ratings_from_user %}
+
+          <li>
+            Movie title: {{ rating.movie.title}}
+            Movie score: {{ rating.score }}
+          </li>
+
+      {% endfor %}
+    </ul>
 
 {% endblock %}

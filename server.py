@@ -107,7 +107,6 @@ def user_info(user_id):
     zipcode = user.zipcode
     ratings_from_user = user.ratings
 
-
     return render_template("user_info.html", user_id=user_id,
                                             age=age,
                                             zipcode=zipcode,
