@@ -76,7 +76,8 @@ def handle_login():
 
     if user:
         if form_password == user.password:
-            session['user'] == user.email
+            session['user'] = user.email
+
             flash(("Logged in as {}").format(user.email))
             return redirect('/')
         else:
@@ -85,6 +86,22 @@ def handle_login():
     else:
         flash("You have not registered yet. Please do so.")
         return redirect("/registration")
+
+@app.route("/log-out")
+def user_log_out():
+    """User Logs Out"""
+
+    session.pop('user')
+
+    flash("You successfully logged out")
+    return redirect('/')
+
+# @app.route("/users/<int:user.user_id>")
+# def user_info():
+#     """Provide user info"""
+
+    
+
 
 
 if __name__ == "__main__":
