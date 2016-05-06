@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>Movie Information</h2>
+
+    Yay we got here! :D <br>
+
+    Title: <a href="{{ movie_url }}"> {{ title }} </a><br>
+    Released: {{ release_date }}<br>
+
+    <ul>
+    {% for rating in ratings_for_movie %}
+
+          <li>
+            Rating: {{ rating.score }}
+          </li>
+
+      {% endfor %}
+    </ul>
+
+    <form action="/handle-rating" method="POST">
+    <label for="user-rating">Rate this movie:</label>
+    <input type="number" name="movie_rating" min="1" max="5" id="user-rating">
+    <input type="hidden" name="movie_id" value="{{movie_id}}">
+    <br>
+    <input type="submit"/>
+
+    </form>
+  
+
+{% endblock %}

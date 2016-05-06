@@ -76,7 +76,7 @@ def handle_login():
 
     if user:
         if form_password == user.password:
-            session['user'] = user.email
+            session['user'] = user.user_id
 
             flash(("Logged in as {}").format(user.email))
             return redirect('/')
@@ -112,9 +112,64 @@ def user_info(user_id):
                                             zipcode=zipcode,
                                             ratings_from_user=ratings_from_user)
 
-# User.query.filter_by(email=email).all():
-    
+@app.route("/movies")
+def movie_list():
+    """Show list of movies."""
 
+    movies = Movie.query.order_by(Movie.title).all()
+    return render_template("movie_list.html", movies=movies)
+
+
+@app.route("/movies/<int:movie_id>")
+def movie_info(movie_id):
+    """Provide movie info"""
+
+    movie = Movie.query.filter_by(movie_id=movie_id).first()
+
+    ratings_for_movie = movie.ratings
+    title = movie.title
+    release_date = movie.released_at
+    movie_url = movie.imdb_url
+    movie_id = movie.movie_id
+
+    return render_template("movie_info.html", ratings_for_movie=ratings_for_movie,
+                                                title = title,
+                                                release_date = release_date,
+                                                movie_url = movie_url,
+                                                movie_id=movie_id)
+
+
+@app.route("/handle-rating", methods=["POST"])
+def submitted_rating():
+    """Updates ratings table."""
+
+    submit = request.form.get("movie_rating")
+    movie_id = request.form.get("movie_id")
+
+    logged_in_user_id = session['user']
+
+    if logged_in_user_id:
+
+        booger
+        #handle rating
+        if Rating.query.filter_by(user_id =logged_in_user_id, movie_id=movie_id):
+            print "UPdate "
+
+            # if movie_rating is in 
+             # if raing is there update
+        else:
+            print "commit"
+             # add rating and commit  
+        # flash("Email already registered")
+        # return redirect("/registration")
+    else:
+    #     #send to homepage, flash "log in to rate this movie"
+    #     new_movie_rating = Rating(email=email, 
+    #                     score=score)
+    #     db.session.add(new_user)
+    #     db.session.commit()
+        print "got to else condition"
+        return render_template("homepage.html")
 
 
 if __name__ == "__main__":
